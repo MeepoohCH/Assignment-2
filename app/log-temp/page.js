@@ -1,134 +1,139 @@
-'use client'; 
+'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDroneConfig } from '../context/DroneConfigContext';
+import { ArrowPathIcon, CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline'; // Import Heroicons
+import AppFooter from '../components/AppFooter';
 
-const TempLogFormPage = () => {
-    const { config, isLoading, error, DRONE_ID, API_URL } = useDroneConfig();
-    
+export default function LogTempPage() {
+    const { config, isLoading, error, API_URL, DRONE_ID } = useDroneConfig();
     const [celsius, setCelsius] = useState('');
-    const [message, setMessage] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [status, setStatus] = useState(''); // 'success', 'error', 'loading'
 
+    const gradientTextClass = "bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-500"; 
+    const gradientButtonClass = "bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-700 hover:to-blue-600";
 
-    // 1. การจัดการสถานะการโหลดและข้อผิดพลาด
-    if (isLoading) {
-        return (
-            <div className="text-center p-8 text-lg font-medium text-indigo-600">
-                <p>กำลังเตรียมฟอร์ม (โหลด Config)...</p>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="text-center p-8 text-red-500 bg-red-100 border border-red-400 rounded-lg">
-                <p className="font-bold">❌ Error Loading Config:</p>
-                <p className="text-sm">{error}</p>
-            </div>
-        );
-    }
+    if (isLoading) return (
+        <div className="text-center py-40 bg-white min-h-screen">
+            <p className="text-4xl font-extrabold text-indigo-600 animate-pulse flex items-center justify-center space-x-3">
+                <ArrowPathIcon className="w-8 h-8"/> <span>Fetching Configuration...</span>
+            </p>
+        </div>
+    );
     
-    if (!config) {
-        return (
-            <div className="text-center p-8 text-red-500">
-                <p>ไม่สามารถโหลดข้อมูล Drone Config สำหรับ Drone ID: {DRONE_ID} ได้</p>
-                <p className="text-sm mt-2">โปรดตรวจสอบว่า API Server ทำงานและ DRONE_ID ถูกต้อง</p>
-            </div>
-        );
-    }
+    if (error || !config) return <div className="text-center p-10 text-xl text-red-600">Error: Cannot load drone configuration.</div>;
 
-    // 2. ฟังก์ชัน Submit Form
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setMessage(''); // เคลียร์ข้อความก่อนหน้า
-        setIsSubmitting(true);
         
-        // Payload ที่ต้องใช้: drone_id, drone_name, country (จาก config) และ celsius (จาก form)
-        const payload = {
-            drone_id: config.drone_id,
-            drone_name: config.drone_name,
-            country: config.country,
-            celsius: parseFloat(celsius), 
-        };
+        const temp = parseFloat(celsius);
+        if (isNaN(temp)) {
+            setStatus('error: Please enter a valid numerical temperature.');
+            return;
+        }
+        if (temp < -50 || temp > 100) {
+            setStatus('error: Temperature seems out of a normal range (-50°C to 100°C).');
+            return;
+        }
 
+        setStatus('loading');
+        
         try {
+            const logData = {
+                drone_id: DRONE_ID,
+                drone_name: config.drone_name,
+                country: config.country,
+                celsius: temp
+            };
+
             const response = await fetch(`${API_URL}/logs`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(logData),
             });
 
-            if (response.status === 201) {
-                setMessage('✅ บันทึก Log อุณหภูมิสำเร็จแล้ว!');
-                setCelsius(''); // เคลียร์ form
-            } else {
-                // สำหรับ Error อื่นๆ (เช่น 400 Bad Request)
+            if (!response.ok) {
                 const errorData = await response.json();
-                setMessage(`❌ ส่ง Log ล้มเหลว: ${errorData.message || response.statusText}`);
+                throw new Error(`API failed: ${errorData.message || response.statusText}`);
             }
-        } catch (submitError) {
-            setMessage(`❌ Network Error: ${submitError.message}`);
-        } finally {
-            setIsSubmitting(false);
+
+            setStatus('success');
+            setCelsius(''); 
+        } catch (err) {
+            console.error('Log submission error:', err);
+            setStatus(`error: Failed to submit log. ${err.message}`);
         }
     };
 
-   
-    // 3. UI/Form Component
     return (
-        <div className="p-8 max-w-lg mx-auto bg-white shadow-2xl rounded-xl">
-            <h2 className="text-4xl font-extrabold text-gray-900 mb-6 border-b-2 border-indigo-200 pb-3">
-                🌡️ บันทึกอุณหภูมิ (Log Form)
-            </h2>
-            
-            <div className="mb-6 p-4 bg-indigo-50 border-l-4 border-indigo-500 text-indigo-800 rounded-md">
-                <p className="font-semibold">กำลังบันทึก Log สำหรับ:</p>
-                <p className="text-sm mt-1">
-                    **{config.drone_name}** (ID: {config.drone_id}) จาก {config.country}
-                </p>
-            </div>
-            
-            <form onSubmit={handleSubmit} className="space-y-6">
-                <label className="block">
-                    <span className="text-gray-700 font-medium text-lg">ป้อนอุณหภูมิ (°C):</span>
-                    <input
-                        type="number"
-                        step="0.1"
-                        value={celsius}
-                        onChange={(e) => setCelsius(e.target.value)}
-                        required
-                        min="-100" // กำหนด min/max เพื่อป้องกัน input ที่ไม่สมเหตุสมผล
-                        max="200"
-                        className="mt-2 block w-full rounded-lg border-gray-300 shadow-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-3 text-2xl font-mono transition duration-150"
-                        placeholder="เช่น 35.5"
-                        disabled={isSubmitting}
-                    />
-                </label>
+        <div className="py-12 md:py-10 px-4 bg-gray-50 min-h-screen">
+            <div className="max-w-xl mx-auto p-8 bg-white shadow-2xl shadow-indigo-100/70 rounded-3xl border border-gray-100">
                 
-                <button
-                    type="submit"
-                    className={`w-full py-3 px-4 rounded-lg shadow-xl text-xl font-bold text-white transition duration-200 ease-in-out ${
-                        isSubmitting
-                        ? 'bg-gray-400 cursor-not-allowed'
-                        : 'bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300'
-                    }`}
-                    disabled={isSubmitting}
-                >
-                    {isSubmitting ? '...กำลังส่งข้อมูล...' : 'Submit Data'}
-                </button>
-            </form>
+                <header className="text-center mb-8 border-b pb-4">
+                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
+                        <span className={`${gradientTextClass}`}>
+                            Sensor Data Input
+                        </span>
+                    </h1>
+                    <p className="mt-2 text-gray-500 text-base">
+                        Logging temperature for <strong>{config.drone_name}</strong> 
+                    </p>
+                </header>
 
-            {/* แสดงสถานะการส่งข้อมูล */}
-            {message && (
-                <div className={`mt-6 p-4 rounded-lg text-lg font-semibold ${
-                    message.startsWith('✅') ? 'bg-green-100 text-green-800 border-green-400' : 'bg-red-100 text-red-800 border-red-400'
-                } border`}>
-                    {message}
-                </div>
-            )}
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="p-4 bg-indigo-50 rounded-xl text-sm font-medium text-gray-700 border-l-4 border-indigo-400 flex justify-between">
+                        <p>Drone ID: <span className="font-mono font-bold text-indigo-700">{DRONE_ID}</span></p>
+                        <p>Country: <span className="text-indigo-700 font-bold">{config.country}</span></p>
+                    </div>
+                    <div>
+                        <label htmlFor="celsius" className="block text-base font-bold text-gray-700 mb-2">
+                            Temperature (Celsius ºC)
+                        </label>
+                        <input
+                            id="celsius"
+                            type="number"
+                            step="0.1"
+                            value={celsius}
+                            onChange={(e) => setCelsius(e.target.value)}
+                            required
+                            className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-md focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-xl"
+                            placeholder="Enter value e.g. 25.5"
+                            disabled={status === 'loading'}
+                        />
+                    </div>
+                    
+                    <button
+                        type="submit"
+                        disabled={status === 'loading'}
+                        className={`w-full py-3 rounded-xl text-white font-extrabold text-lg transition duration-300 shadow-xl flex items-center justify-center space-x-2
+                            ${status === 'loading' 
+                                ? 'bg-gray-400 cursor-not-allowed' 
+                                : `${gradientButtonClass} hover:shadow-2xl`}`
+                        }
+                    >
+                        {status === 'loading' ? (
+                            <>
+                                <ArrowPathIcon className="w-5 h-5 animate-spin" /> <span>Submitting Data...</span>
+                            </>
+                        ) : 'Submit'}
+                    </button>
+                </form>
+
+                {/* Status Message */}
+                {status === 'success' && (
+                    <div className="mt-6 p-4 rounded-xl bg-green-100 text-green-700 font-bold border border-green-300 shadow-md flex items-center space-x-2">
+                        <CheckCircleIcon className="w-5 h-5" /> <span>Log submitted successfully!</span>
+                    </div>
+                )}
+                {status.startsWith('error') && (
+                    <div className="mt-6 p-4 rounded-xl bg-red-100 text-red-700 font-bold border border-red-300 shadow-md flex items-center space-x-2">
+                        <ExclamationCircleIcon className="w-5 h-5" /> <span>{status.replace('error: ', 'Submission Failed: ')}</span>
+                    </div>
+                )}
+            </div>
+            <AppFooter/>
         </div>
     );
-};
-
-export default TempLogFormPage;
+}
