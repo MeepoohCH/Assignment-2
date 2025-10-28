@@ -1,5 +1,5 @@
 import NavCard from "./components/NavCard"; 
-import { Cog8ToothIcon, FireIcon, DocumentTextIcon } from '@heroicons/react/24/outline'; 
+import { Cog8ToothIcon, DocumentTextIcon, FireIcon, ThermometerIcon } from '@heroicons/react/24/outline'; 
 import React from 'react';
 import AppFooter from "./components/AppFooter";
 
@@ -16,31 +16,35 @@ export default function HomePage() {
             title: "1. Configuration Settings",
             description: "Access and verify primary drone settings, including Name, Light Status, and Country of Operation. Data available via Context.",
             icon: <Cog8ToothIcon />,
+            link: "View Config"
         },
         {
             href: "/log-temp",
             title: "2. Temperature Data Input",
             description: "Dedicated interface for submitting new temperature readings (Celsius) using the POST /logs API endpoint.",
             icon: <FireIcon />,
+            link: "Input Temperature"
         },
         {
             href: "/logs",
             title: "3. Historical Data Viewer",
             description: "Review comprehensive log history for this Device ID. Features efficient data display with table pagination.",
             icon: <DocumentTextIcon />,
+            link: "View Logs"
         },
     ];
     
     return (
         <div className="py-10 px-4 sm:px-6 lg:px-8 min-h-[calc(100vh-80px)] bg-gray-50">
-            <header className="max-w-4xl mx-auto text-center mb-12"> 
-                {/* *** ปรับ P Tag ให้เป็นข้อความต้อนรับสั้นๆ *** */}
-                <p className="text-xl font-semibold text-gray-500 uppercase mb-3 tracking-widest">
+            <header className="max-w-5xl mx-auto text-center mb-12"> 
+                
+                {/* P Tag: Welcome Text (ใช้ Font Size ปกติเพื่อให้ดู Elegant) */}
+                <p className="text-base font-semibold text-gray-500 uppercase mb-3 tracking-widest">
                     WELCOME TO
                 </p>
                 
-                {/* Headline: ใช้ Gradient Text สำหรับคำหลัก */}
-                <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
+                {/* Headline: ลดขนาดจาก 6xl/7xl เหลือ 5xl/6xl เพื่อความสมดุล */}
+                <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-4 leading-tight">
                     <span className={`${gradientTextClass} block`}>
                         DRONE MANAGEMENT SYSTEM
                     </span>
@@ -50,7 +54,7 @@ export default function HomePage() {
                 <p className="text-xl text-gray-600 mt-6">
                     Managing Drone ID: 
                     <span 
-                        className="font-mono text-indigo-600 font-extrabold ml-1 drop-shadow-sm transition-colors duration-300 hover:text-blue-600"
+                        className="font-mono text-indigo-700 font-extrabold ml-1 drop-shadow-sm transition-colors duration-300 hover:text-blue-600"
                     >
                         {DRONE_ID}
                     </span>
@@ -67,6 +71,7 @@ export default function HomePage() {
                         title={card.title}
                         description={card.description}
                         icon={card.icon}
+                        link = {card.link}
                     />
                 ))}
             </div>
