@@ -2,34 +2,112 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link'; 
+import { usePathname } from 'next/navigation'; 
 
 
 const Navbar = () => {
+    const currentPath = usePathname();
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
 
-    // ปรับปรุง Label ให้ดูเป็นทางการและสอดคล้องกับ Pages
     const navItems = [
         { href: "/config", label: "Configuration" },
-        { href: "/log-temp", label: "Log Data" }, // เปลี่ยนจาก Log Form
+        { href: "/log-temp", label: "Log Data" }, 
         { href: "/logs", label: "View History" },
     ];
 
-    // Indigo/Blue Gradient Class
     const gradientTextClass = "bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-500";
     
-    // Base Class for Interactive elements (Indigo theme)
     const baseInteractiveClass = "text-indigo-600 hover:text-indigo-700 transition duration-150";
+
+    const activeClass = "text-indigo-600";
+    const inactiveClass = "text-gray-700 hover:text-indigo-600";
+
+
+    const renderDesktopNavItems = () => (
+        <div className="flex space-x-8">
+            {navItems.map((item) => {
+                const isActive = item.href === currentPath;
+
+                return (
+                    <Link 
+                        key={item.href}
+                        href={item.href} 
+                        className={`
+                            relative 
+                            text-base 
+                            font-semibold 
+                            py-2 
+                            transition-all 
+                            duration-300 
+                            group
+                            ${isActive ? activeClass : inactiveClass}
+                        `}
+                    >
+                        {item.label}
+                        <span 
+                            className={`
+                                absolute 
+                                bottom-0 
+                                left-0 
+                                w-full 
+                                h-[3px] 
+                                bg-gradient-to-r 
+                                from-indigo-400 
+                                to-blue-500 
+                                transition-transform 
+                                duration-300 
+                                origin-left 
+                                rounded-full
+                                ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}
+                            `}
+                        ></span>
+                    </Link>
+                );
+            })}
+        </div>
+    );
+
+    const renderMobileNavItems = () => (
+        <div className="px-4 pt-2 pb-4 space-y-1">
+            {navItems.map((item) => {
+                const isActive = item.href === currentPath;
+                return (
+                    <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setIsOpen(false)} 
+                        className={`
+                            block 
+                            px-3 
+                            py-2 
+                            rounded-lg 
+                            text-base 
+                            font-semibold 
+                            transition 
+                            duration-300
+                            ${isActive 
+                                ? 'bg-indigo-100 text-indigo-700' 
+                                : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600'
+                            }
+                        `}
+                    >
+                        {item.label}
+                    </Link>
+                );
+            })}
+        </div>
+    );
+
 
     return (
         <nav className="bg-white/95 backdrop-blur-xl shadow-md sticky top-0 z-50 border-b border-gray-100/70">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-20"> 
                     
-                    {/* 1. Logo Section: ใช้ Indigo/Blue Accent */}
                     <div className="flex-shrink-0">
                         <Link href="/" className="text-3xl font-extrabold transition duration-300 flex items-center">
                             <span className="text-gray-900 tracking-tight">
@@ -41,28 +119,13 @@ const Navbar = () => {
                         </Link>
                     </div>
 
-                    {/* 2. Desktop Navigation */}
                     <div className="hidden md:flex items-center">
-                        <div className="flex space-x-8">
-                            {navItems.map((item) => (
-                                <Link 
-                                    key={item.href}
-                                    href={item.href} 
-                                    className="relative text-gray-700 text-base font-semibold py-2 transition-all duration-300 group hover:text-indigo-600"
-                                >
-                                    {item.label}
-                                    {/* Underline Hover Effect: Indigo/Blue Gradient */}
-                                    <span className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-indigo-400 to-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full"></span>
-                                </Link>
-                            ))}
-                        </div>
+                        {renderDesktopNavItems()}
                     </div>
 
-                    {/* 3. Mobile Menu Button */}
                     <div className="md:hidden flex items-center">
                         <button
                             onClick={toggleMenu}
-                            // ใช้ Base Class สำหรับ Hover Effect
                             className={`inline-flex items-center justify-center p-2 rounded-md text-gray-700 ${baseInteractiveClass.replace('hover:text-indigo-700', 'hover:text-indigo-600')} hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-600 transition duration-150`}
                             aria-expanded={isOpen}
                         >
@@ -81,21 +144,8 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* 4. Mobile Menu Content */}
             <div className={`${isOpen ? 'block' : 'hidden'} md:hidden bg-white/95 backdrop-blur-xl shadow-xl border-t border-gray-200`}>
-                <div className="px-4 pt-2 pb-4 space-y-1">
-                    {navItems.map((item) => (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            onClick={() => setIsOpen(false)} 
-                            // ใช้ Hover Class ที่ชัดเจน
-                            className={`block px-3 py-2 rounded-lg text-base font-semibold text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition duration-300`}
-                        >
-                            {item.label}
-                        </Link>
-                    ))}
-                </div>
+                {renderMobileNavItems()}
             </div>
         </nav>
     );
