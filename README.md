@@ -1,8 +1,6 @@
 # 🚀 Assignment-2
 
-**Assignment-2** เป็นโครงการสร้างส่วนหน้า (Web Frontend) เพื่อแสดงข้อมูลการตั้งค่า (Config) และบันทึกข้อมูล (Log) ของโดรน โดยใช้ API Server ที่สร้างไว้ใน Assignment #1
-
-โปรเจคนี้พัฒนาด้วย **Next.js** โดยใช้ **Tailwind CSS** สำหรับการจัดรูปแบบ และมีการทำ **Pagination** ในหน้าแสดง Log
+**Assignment-2** เป็นโครงการสร้างส่วนหน้า (Web Frontend) เพื่อแสดงข้อมูลการตั้งค่า (Config) และบันทึกข้อมูล (Log) ของโดรน โดยใช้ API Server ที่สร้างไว้ใน Assignment #1 โปรเจคนี้พัฒนาด้วย **Next.js** โดยใช้ **Tailwind CSS** สำหรับการจัดรูปแบบ และมีการทำ **Pagination** ในหน้าแสดง Log
 
 ---
 
@@ -16,13 +14,13 @@
 * มีส่วนนำทาง (Card Section) ไปยัง 3 ฟังก์ชันหลัก ได้แก่ **Configuration Settings**, **Temperature Data Input**, และ **Historical Data Viewer**.
 
 ### 2. ⚙️ Page #1: View Config
-* เข้าถึงได้จากลิงก์ "Configuration" ใน Navbar
-* แสดงข้อมูล **Drone Configuration** ของ Drone ID ที่ระบุในไฟล์ `.env.local`
-* แสดงข้อมูลสำคัญ 4 รายการ
-    * **Drone ID**
-    * **Drone Name**
-    * **Country**
-    * **Light Status** 
+- เข้าถึงได้จากลิงก์ “Configuration” ใน Navbar  
+- แสดงข้อมูล **Drone Configuration** ของ Drone ID ที่ระบุในไฟล์ `.env.local`  
+- ข้อมูลสำคัญ 4 รายการ:
+  - **Drone ID**
+  - **Drone Name**
+  - **Country**
+  - **Light Status**
 
 ### 3. 🌡️ Page #2: Temperature Log Form
 * เข้าถึงได้จากลิงก์ "Log Data" ใน Navbar
@@ -56,46 +54,46 @@
 
 ### Prerequisites (ข้อกำหนดเบื้องต้น)
 
-* **Node.js**: รองรับเวอร์ชันที่ใช้กับ Next.js 16.0.0 (ตามที่ระบุใน `package-lock.json`)
+- **Node.js**: รองรับเวอร์ชันที่ใช้กับ Next.js 16.0.0 (ตามที่ระบุใน `package-lock.json`)
 
 ### ขั้นตอนการติดตั้ง (Installation Steps)
 
-1.  **ติดตั้ง Dependencies:**
-    * ไปยัง Root Directory ของโปรเจกต์ (ที่มีไฟล์ `package.json` อยู่)
-    * รันคำสั่งเพื่อติดตั้ง Dependencies ทั้งหมด
+1.  **ติดตั้ง Dependencies**
+- ไปยัง Root Directory ของโปรเจกต์ (ที่มีไฟล์ `package.json` อยู่)
+- รันคำสั่งเพื่อติดตั้ง Dependencies ทั้งหมด
         ```bash
         npm install
         ```
+2.  **ตั้งค่า Environment Variables** (`.env.local`)
+ - สร้างไฟล์ชื่อ `.env.local` ใน Root Directory ของโปรเจกต์
+ - กำหนดค่า Config ที่จำเป็น
+      
+   ```
+   # ตั้งค่า Drone ID 
+   NEXT_PUBLIC_DRONE_ID=XXXX 
 
-2.  **ตั้งค่า Environment Variables (`.env.local`):**
-    * สร้างไฟล์ชื่อ **`.env.local`** ใน Root Directory ของโปรเจกต์
-    * กำหนดค่า Config ที่จำเป็น:
-        ```env
-        # ตั้งค่า Drone ID 
-        NEXT_PUBLIC_DRONE_ID=XXXX 
-
-        # API Base URL (API Server จาก Assignment #1)
-        NEXT_PUBLIC_API_URL=https://assignment-1-gray-two.vercel.app
-        ```
-    * > **หมายเหตุ:** **เพื่อให้ไฟล์ `.env.local` ถูกรวมอยู่ในการส่งงานสำหรับการตรวจของอาจารย์** จึงได้มีการแก้ไขไฟล์ `.gitignore` ชั่วคราว แต่โดยหลักการปฏิบัติที่ดี ไฟล์นี้ควรกำหนดให้อยู่ใน `.gitignore` เพื่อป้องกันการ Commit ข้อมูล Config ที่อ่อนไหวเข้าสู่ Repository
+   # API Base URL (API Server จาก Assignment #1)
+    NEXT_PUBLIC_API_URL=https://assignment-1-gray-two.vercel.app
+   ```
+> **⚠️หมายเหตุ:**
+> **เพื่อให้ไฟล์ `.env.local` ถูกรวมอยู่ในการส่งงานสำหรับการตรวจของอาจารย์** จึงได้มีการแก้ไขไฟล์ `.gitignore` ชั่วคราว แต่โดยหลักการปฏิบัติที่ดี ไฟล์นี้ควรกำหนดให้อยู่ใน `.gitignore` เพื่อ ป้องกันการ Commit ข้อมูล Config ที่อ่อนไหวเข้าสู่ Repository
 
 3.  **ตรวจสอบไฟล์ Config:**
-    * **Tailwind CSS Config**: ไฟล์ `tailwind.config.js` และ `postcss.config.js` ได้ถูกตั้งค่าไว้แล้ว
-    * **Next.js Config**: ไฟล์ `next.config.mjs` ถูกตั้งค่าไว้แล้ว.
-    * **JS/TS Config**: ไฟล์ `jsconfig.json` ถูกตั้งค่า Path Aliases `@/*` ไว้แล้ว
-  
-    * 
+- **Tailwind CSS Config**: ไฟล์ `tailwind.config.js` และ `postcss.config.js` ได้ถูกตั้งค่าไว้แล้ว
+- **Next.js Config**: ไฟล์ `next.config.mjs` ถูกตั้งค่าไว้แล้ว.
+- **JS/TS Config**: ไฟล์ `jsconfig.json` ถูกตั้งค่า Path Aliases `@/*` ไว้แล้ว
+
 ---
 
 ## 🏃‍♂️ How to Run
 
 ใช้คำสั่งต่อไปนี้เพื่อรันโปรเจกต์ในโหมดพัฒนา (Development Mode):
 
-```bash
-npm run dev
-# หรือ
-next dev --webpack
-```
+   ```bash
+   npm run dev
+   # หรือ
+   next dev --webpack
+   ```
 
 แอปพลิเคชันจะเริ่มต้นที่ `http://localhost:3000` (หรือพอร์ตอื่นตามที่ Next.js กำหนด)
 
@@ -105,9 +103,11 @@ next dev --webpack
 
 - **Host:** Vercel  
 - **Live URL:** https://assignment-2-8468.vercel.app
+> 💡 **หมายเหตุ:**  
+> โปรเจกต์นี้ใช้ **Next.js 16 (App Router)** และ **React 19** ซึ่งรองรับฟีเจอร์สมัยใหม่เช่น `use`, `Suspense`, และ `Server Components` เพื่อให้ทำงานได้อย่างมีประสิทธิภาพสูงสุดบน Vercel
 ---
 
-## 👤 Author
+## 👩‍💻 Author
 
 **Created by:** *Chiratchaya Tangnamprasert*  
 **Student ID:** 66010125
