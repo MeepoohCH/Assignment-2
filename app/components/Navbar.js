@@ -33,7 +33,7 @@ const Navbar = () => {
                     <div className="flex-shrink-0">
                         <Link href="/" className="text-3xl font-extrabold transition duration-300 flex items-center">
                             <span className="text-gray-900 tracking-tight">
-                                Drone
+                                DMS
                             </span>
                             <span className={`text-xl ${gradientTextClass} ml-2 font-black border border-indigo-200 px-2 rounded-lg shadow-sm`}>
                                 Console
