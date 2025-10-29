@@ -2,6 +2,7 @@ import NavCard from "./components/NavCard";
 import { Cog8ToothIcon, DocumentTextIcon, FireIcon, ThermometerIcon } from '@heroicons/react/24/outline'; 
 import React from 'react';
 import AppFooter from "./components/AppFooter";
+import SVGComponent from "./components/Thermometer";
 
 const DRONE_ID = process.env.NEXT_PUBLIC_DRONE_ID || 'N/A'; 
 
@@ -22,7 +23,7 @@ export default function HomePage() {
             href: "/log-temp",
             title: "2. Temperature Data Input",
             description: "Dedicated interface for submitting new temperature readings (Celsius) using the POST /logs API endpoint.",
-            icon: <FireIcon />,
+            icon: <SVGComponent />,
             link: "Input Temperature"
         },
         {
@@ -38,12 +39,12 @@ export default function HomePage() {
         <div className="py-10 px-4 sm:px-6 lg:px-8 min-h-[calc(100vh-80px)] bg-gray-50">
             <header className="max-w-5xl mx-auto text-center mb-12"> 
                 
-                {/* P Tag: Welcome Text (ใช้ Font Size ปกติเพื่อให้ดู Elegant) */}
+                
                 <p className="text-base font-semibold text-gray-500 uppercase mb-3 tracking-widest">
                     WELCOME TO
                 </p>
                 
-                {/* Headline: ลดขนาดจาก 6xl/7xl เหลือ 5xl/6xl เพื่อความสมดุล */}
+                {/* Headline*/}
                 <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-4 leading-tight">
                     <span className={`${gradientTextClass} block`}>
                         DRONE MANAGEMENT SYSTEM

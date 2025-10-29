@@ -2,22 +2,18 @@
 
 import React from 'react';
 import { useDroneConfig } from '../context/DroneConfigContext';
-import { LightBulbIcon, TagIcon, MapIcon, KeyIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'; // Using Heroicons
+import { LightBulbIcon, TagIcon, MapIcon, KeyIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'; 
 import AppFooter from '../components/AppFooter';
 
-// --- Helper: Light Status Badge (Optimized & Clean) ---
 const LightStatusBadge = ({ lightStatus }) => {
     const isLightOn = lightStatus && lightStatus.toLowerCase() === "on";
 
-    // ON: Teal/Cyan Gradient Background + Glow Shadow
     const onClasses = "bg-gradient-to-r from-teal-500 to-cyan-600 shadow-xl shadow-teal-300/70";
-    // OFF: Soft Grey Gradient Background
     const offClasses = "bg-gradient-to-r from-gray-500 to-gray-600 shadow-lg shadow-gray-300/50";
 
     const colorClasses = isLightOn ? onClasses : offClasses;
 
     return (
-        // *** ปรับขนาด Font ใน Badge: text-lg -> text-base ***
         <span
             className={`px-6 py-2.5 text-base font-extrabold rounded-full text-white tracking-wider inline-flex items-center space-x-2 ${colorClasses} transition duration-300 transform hover:scale-[1.05]`}
         >
@@ -33,15 +29,11 @@ const LightStatusBadge = ({ lightStatus }) => {
     );
 };
 
-// --- Helper: Data Card for Name/Country (Cool Indigo Accent) ---
 const DataCard = ({ title, icon: IconComponent, value }) => (
-    // Structure: Value (Top) -> Label/Icon (Bottom)
     <div className="flex flex-col justify-between p-8 bg-white rounded-2xl border border-gray-100 shadow-lg transform transition duration-300 hover:shadow-xl hover:scale-[1.01] cursor-default h-full">
         
-        {/* *** VALUE (Large and Prominent): text-4xl -> text-3xl *** */}
         <span className="text-3xl font-extrabold text-gray-900 block truncate leading-snug mb-5">{value}</span>
         
-        {/* LABEL (Contextual and Small) */}
         <div className="flex items-center space-x-4 pt-2 border-t border-gray-100/70">
             <IconComponent className="w-6 h-6 text-indigo-600" /> 
             <span className="font-semibold text-sm uppercase text-indigo-600 tracking-widest">{title}</span>
@@ -50,14 +42,11 @@ const DataCard = ({ title, icon: IconComponent, value }) => (
 );
 
 
-// --- Main Page Component ---
 const ConfigPage = () => {
     const { config, isLoading, error, DRONE_ID } = useDroneConfig();
 
-    // Indigo/Blue Gradient
     const gradientTextClass = "bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-500"; 
 
-    // --- Loading State (Indigo Accent) ---
     if (isLoading)
         return (
             <div className="text-center py-40 bg-white min-h-screen">
@@ -67,7 +56,6 @@ const ConfigPage = () => {
             </div>
         );
 
-    // --- Error & No Data State (Consistent Soft UI) ---
     if (error)
         return (
             <div className="text-center p-12 bg-red-50 border border-red-300 rounded-2xl shadow-xl shadow-red-100 max-w-xl mx-auto mt-20">
@@ -88,7 +76,6 @@ const ConfigPage = () => {
         );
 
     return (
-        // *** ปรับ py-12 md:py-10 ให้ Header ชิดด้านบนมากขึ้น ***
         <div className="py-12 md:py-10 px-4 bg-gray-50 min-h-screen">
             <div className="max-w-4xl mx-auto">
                 
@@ -112,35 +99,26 @@ const ConfigPage = () => {
                     </p>
                 </header>
 
-                {/* --- Main Data Container: Soft UI Grid (Unified Value-First Layout) --- */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 p-6 md:p-8 bg-white/70 shadow-inner rounded-3xl border border-gray-100">
                     
-                    {/* 1. Drone ID - Hero Card (Value First, Gradient) */}
                     <div className="flex flex-col justify-between p-8 bg-gradient-to-br from-indigo-700 to-blue-600 rounded-2xl shadow-2xl shadow-indigo-400/50 transform transition duration-500 hover:scale-[1.02] cursor-default h-full">
-                        {/* *** VALUE: text-4xl md:text-5xl -> text-3xl md:text-4xl *** */}
                         <span className="font-mono text-3xl md:text-4xl font-extrabold text-white block truncate tracking-tight mb-5">{config.drone_id}</span>
                         
-                        {/* LABEL */}
                         <div className="flex items-center space-x-4 pt-2 border-t border-white/30">
                             <KeyIcon className="w-6 h-6 text-white/80" /> 
                             <span className="font-bold text-sm uppercase text-white/80 tracking-widest">DRONE ID</span>
                         </div>
                     </div>
                     
-                    {/* 2. Drone Name - Soft UI Card (Value First) */}
                     <DataCard title="DRONE Name" icon={TagIcon} value={config.drone_name} />
 
-                    {/* 3. Deployment Country - Soft UI Card (Value First) */}
                     <DataCard title="Country" icon={MapIcon} value={config.country} />
 
-                    {/* 4. Light Status - Soft UI Card (Value First, Badge is the value) */}
                     <div className="flex flex-col justify-between p-8 bg-white rounded-2xl border border-gray-100 shadow-lg transform transition duration-300 hover:shadow-xl hover:scale-[1.01] cursor-default h-full">
-                        {/* VALUE (Badge) */}
                         <div className="mb-5">
                             <LightStatusBadge lightStatus={config.light} />
                         </div>
                         
-                        {/* LABEL */}
                         <div className="flex items-center space-x-4 pt-2 border-t border-gray-100/70">
                             <LightBulbIcon className="w-6 h-6 text-indigo-600" />
                             <span className="font-semibold text-sm uppercase text-indigo-600 tracking-widest">LIGHT STATUS</span>
@@ -149,7 +127,7 @@ const ConfigPage = () => {
 
                 </div>
 
-                 <AppFooter/>
+                <AppFooter/>
             </div>
         </div>
     );

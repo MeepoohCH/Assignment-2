@@ -5,15 +5,12 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const DRONE_ID = process.env.NEXT_PUBLIC_DRONE_ID ;
 const API_URL = process.env.NEXT_PUBLIC_API_URL ;
 
-// 1. สร้าง Context
+
 const DroneConfigContext = createContext();
 
-// 2. สร้าง Hook เพื่อให้ Components อื่นเรียกใช้
 export const useDroneConfig = () => {
     return useContext(DroneConfigContext);
 };
-
-// 3. สร้าง Provider Component
 export const DroneConfigProvider = ({ children }) => {
     const [config, setConfig] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +42,6 @@ export const DroneConfigProvider = ({ children }) => {
         error,
         DRONE_ID,
         API_URL,
-        // (Optional) หากต้องการให้ Page #2/3 อัปเดต config ได้
         setConfig 
     };
 
