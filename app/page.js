@@ -22,7 +22,7 @@ export default function HomePage() {
         {
             href: "/log-temp",
             title: "2. Temperature Data Input",
-            description: "Dedicated interface for submitting new temperature readings (Celsius) using the POST logs API endpoint.",
+            description: "Dedicated interface for submitting new temperature readings (Celsius) using the POST /logs API endpoint.",
             icon: <SVGComponent />,
             link: "Input Temperature"
         },
