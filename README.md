@@ -64,16 +64,16 @@
         ```bash
         npm install
         ```
-2.  **ตั้งค่า Environment Variables** (`.env`)
- - สร้างไฟล์ชื่อ `.env` ใน Root Directory ของโปรเจกต์
+2.  **ตั้งค่า Environment Variables** (`.env.local`)
+ - สร้างไฟล์ชื่อ `.env.local` ใน Root Directory ของโปรเจกต์
  - กำหนดค่า Config ที่จำเป็น
       
    ```
    # ตั้งค่า Drone ID 
-   DRONE_ID=XXXX 
+   NEXT_PUBLIC_DRONE_ID=XXXX 
 
    # API Base URL (API Server จาก Assignment #1)
-    API_URL=https://assignment-1-gray-two.vercel.app
+    NEXT_PUBLIC_API_URL=https://assignment-1-gray-two.vercel.app
    ```
 > **⚠️หมายเหตุ:**
 > **เพื่อให้ไฟล์ `.env.local` ถูกรวมอยู่ในการส่งงานสำหรับการตรวจของอาจารย์** จึงได้มีการแก้ไขไฟล์ `.gitignore` ชั่วคราว แต่โดยหลักการปฏิบัติที่ดี ไฟล์นี้ควรกำหนดให้อยู่ใน `.gitignore` เพื่อป้องกันการ Commit ข้อมูล Config ที่อ่อนไหวเข้าสู่ Repository
