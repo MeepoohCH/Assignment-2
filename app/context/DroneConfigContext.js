@@ -2,8 +2,8 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const DRONE_ID = process.env.DRONE_ID ;
-const API_URL = process.env.API_URL ;
+const DRONE_ID = process.env.NEXT_PUBLIC_DRONE_ID ;
+const API_URL = process.env.NEXT_PUBLIC_API_URL ;
 
 
 const DroneConfigContext = createContext();
