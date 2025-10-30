@@ -15,7 +15,7 @@
 
 ### 2. ⚙️ Page #1: View Config
 - เข้าถึงได้จากลิงก์ “Configuration” ใน Navbar  
-- แสดงข้อมูล **Drone Configuration** ของ Drone ID ที่ระบุในไฟล์ `.env`  
+- แสดงข้อมูล **Drone Configuration** ของ Drone ID ที่ระบุในไฟล์ `.env.local`  
 - ข้อมูลสำคัญ 4 รายการ:
   - **Drone ID**
   - **Drone Name**
@@ -76,7 +76,7 @@
     API_URL=https://assignment-1-gray-two.vercel.app
    ```
 > **⚠️หมายเหตุ:**
-> **เพื่อให้ไฟล์ `.env.local` ถูกรวมอยู่ในการส่งงานสำหรับการตรวจของอาจารย์** จึงได้มีการแก้ไขไฟล์ `.gitignore` ชั่วคราว แต่โดยหลักการปฏิบัติที่ดี ไฟล์นี้ควรกำหนดให้อยู่ใน `.gitignore` เพื่อ ป้องกันการ Commit ข้อมูล Config ที่อ่อนไหวเข้าสู่ Repository
+> **เพื่อให้ไฟล์ `.env.local` ถูกรวมอยู่ในการส่งงานสำหรับการตรวจของอาจารย์** จึงได้มีการแก้ไขไฟล์ `.gitignore` ชั่วคราว แต่โดยหลักการปฏิบัติที่ดี ไฟล์นี้ควรกำหนดให้อยู่ใน `.gitignore` เพื่อป้องกันการ Commit ข้อมูล Config ที่อ่อนไหวเข้าสู่ Repository
 
 3.  **ตรวจสอบไฟล์ Config:**
 - **Tailwind CSS Config**: ไฟล์ `tailwind.config.js` และ `postcss.config.js` ได้ถูกตั้งค่าไว้แล้ว
